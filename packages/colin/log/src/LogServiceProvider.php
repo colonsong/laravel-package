@@ -71,10 +71,10 @@ class LogSplitServiceProvider extends ServiceProvider {
     protected function registerPublishing()
     {
         if ($this->app->runningInConsole()) {
-            $this->publishes([__DIR__.'/../config' => config_path()], 'laravel-admin-config');
-            $this->publishes([__DIR__.'/../resources/lang' => resource_path('lang')], 'laravel-admin-lang');
-            $this->publishes([__DIR__.'/../database/migrations' => database_path('migrations')], 'laravel-admin-migrations');
-            $this->publishes([__DIR__.'/../resources/assets' => public_path('vendor/laravel-admin')], 'laravel-admin-assets');
+            $this->publishes([__DIR__.'/../config' => config_path()], 'colinlog-config');
+            $this->publishes([__DIR__.'/../resources/lang' => resource_path('lang')], 'colinlog-lang');
+            $this->publishes([__DIR__.'/../database/migrations' => database_path('migrations')], 'colinlog-migrations');
+            $this->publishes([__DIR__.'/../resources/assets' => public_path('vendor/colinlog')], 'colinlog-assets');
         }
     }
 
@@ -84,5 +84,38 @@ class LogSplitServiceProvider extends ServiceProvider {
         $this->app->singleton('logsplit', function ($app) {
             return new LogSplit();
         });
+
+        $this->loadAdminAuthConfig();
+
+        $this->registerRouteMiddleware();
     }
+
+    /**
+     * Setup auth configuration.
+     *
+     * @return void
+     */
+    protected function loadAdminAuthConfig()
+    {
+        config(Arr::dot(config('admin.auth', []), 'auth.'));
+    }
+
+    /**
+     * Register the route middleware.
+     *
+     * @return void
+     */
+    protected function registerRouteMiddleware()
+    {
+        // register route middleware.
+        foreach ($this->routeMiddleware as $key => $middleware) {
+            app('router')->aliasMiddleware($key, $middleware);
+        }
+
+        // register middleware group.
+        foreach ($this->middlewareGroups as $key => $middleware) {
+            app('router')->middlewareGroup($key, $middleware);
+        }
+    }
+
 }
