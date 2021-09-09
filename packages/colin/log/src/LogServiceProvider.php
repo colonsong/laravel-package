@@ -1,9 +1,10 @@
 <?php
 namespace Colin\Log;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 
-class LogSplitServiceProvider extends ServiceProvider {
+class LogServiceProvider extends ServiceProvider {
 
      /**
      * @var array
