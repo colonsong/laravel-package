@@ -89,6 +89,17 @@ Route::get('/delUser', function () {
 });
 
 
+Route::get('/addImage', function () {
+    $post = \App\Models\Post::firstOrFail();
+
+    $images = new \App\Models\Image(['url' => 'A new comment For Post 1.' ]);
+    $post->images()->save($images);
+
+    $user = \App\Models\User::firstOrFail();
+    $user->images()->save($images);
+});
+
+
 
 
 

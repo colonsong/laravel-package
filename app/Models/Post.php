@@ -25,4 +25,9 @@ class Post extends Model
     {
         return $this->belongsTo(Categorys::class, 'categorys_id', 'id');
     }
+
+    public function images()
+    {
+        return $this->morphMany(\App\Models\Image::class , 'imageable', 'imageable_type' , 'imageable_id', 'id');
+    }
 }
